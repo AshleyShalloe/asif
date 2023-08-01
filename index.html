@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <style>
+        :root {
+            --pride-blue: rgb(57, 155, 194);
+            --pride-pink: pink;
+            --cis-grey: grey;
+            --cis-lightgrey: rgb(232, 231, 231);
+        }
+
+        html {
+            font-family: serif;
+            background: var(--cis-grey);
+        }
+
+        body {
+            margin: 0 auto;
+            width: 360px;
+            background: white;
+            height: 100vh;
+        }
+
+        .storyHeading div {
+            display: inline;
+        }
+
+        .storyHeading {
+            font-weight: bold;
+            font-size: larger;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .story {
+            box-shadow: 0px 0px 10px rgb(160, 160, 160);
+            max-width: 350px;
+            border-top: 2px solid var(--pride-pink);
+            margin: 5px;
+            background: white;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            transition: box-shadow 0.5s;
+        }
+
+        .story:hover {
+            box-shadow: 0px 0px 10px rgba(255, 192, 203, 0.546);
+            cursor: pointer;
+        }
+
+        .storyBlurb {
+            color: rgb(78, 78, 78);
+            line-height: 0.9em;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .storyHeadingSeparator,
+        .storyHeadingCategory {
+            color: var(--pride-blue);
+        }
+
+        .storyOtherMeta div {
+            font-size: small;
+            display: inline;
+        }
+
+        .storyOtherMeta {
+            display: flex;
+            justify-content: space-between;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .storyImage {
+            width: 100%;
+            width: -moz-available;
+            width: -webkit-fill-available;
+            width: fill-available;
+        }
+
+        .storyImageContainer {
+            max-height: 180px;
+            overflow-y: clip;
+        }
+
+        #header {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        #headerLogo {
+            font-family: serif;
+            font-size: xxx-large;
+            font-weight: bold;
+            line-height: 80%;
+            text-align: center;
+        }
+
+        #storyContainer {
+            display: flex;
+            justify-content: center;
+        }
+
+        .storyAuthor {
+            font-style: italic;
+            color: var(--pride-blue);
+        }
+
+        #storyContainerContainer {
+            background: var(--cis-lightgrey);
+            height: 100%;
+            height: -moz-available;
+            height: -webkit-fill-available;
+            height: fill-available;
+            padding-bottom: 40px;
+        }
+
+        .sectionTitle {
+            font-size: xx-large;
+            font-family: serif;
+            font-weight: bold;
+            padding: 5px;
+        }
+
+        #loadOfSheet {
+            height: 15px;
+            background: linear-gradient(skyblue 0%, skyblue 20%, pink 20%, pink 40%, white 40%, white 60%, pink 60%, pink 80%, skyblue 80%)
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <div id="headerLogo">
+            <div>As if</div>
+            <div>I'm paying</div>
+        </div>
+    </div>
+    <div id="loadOfSheet"></div>
+    <div id="storyContainerContainer">
+        <div class="sectionTitle">Headlines</div>
+        <div id="storyContainer">
+        </div>
+    </div>
+</body>
+<script>
+    'use strict'
+
+    var testStory = [{
+        "title": "Test title",
+        "story_url": "https://ashe.org.uk",
+        "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+        "media_url": "https://ashe.org.uk/favicon.svg",
+        "author": "Test Author",
+        "updated": 1690908327000,
+        "category": "Test category"
+    }]
+
+    function storyRecordToHtml(storyRecord) {
+        var gist = storyRecord.summary.split("</p>")[0] + "</p>"
+        var updated = new Date(storyRecord.updated)
+        var updated = `${updated.toLocaleDateString()} ${updated.toLocaleTimeString()}`
+
+        var returnHtml = `
+            <div class="story">
+                <div class="storyHeading">
+                    <div class="storyHeadingCategory">${storyRecord.category}</div>
+                    <div class="storyHeadingSeparator">//</div>
+                    <div class="storyHeadingHeading">${storyRecord.title}</div>
+                </div>
+                <div class="storyBlurb">${gist}</div>
+                <div class="storyImageContainer"><img class="storyImage" src="${storyRecord.media_url}" /></div>
+                <div class="storyOtherMeta">
+                    <div class="storyAuthor">${storyRecord.author}</div>
+                    <div class="storyTime">${updated}</div>
+                </div>
+            </div>
+        `
+
+        return returnHtml
+    }
+
+    function init() {
+        document.getElementById("storyContainer").innerHTML += storyRecordToHtml(testStory[0])
+    }
+
+    init();
+</script>
+
+</html>
