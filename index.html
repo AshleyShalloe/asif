@@ -80,6 +80,8 @@
             width: -moz-available;
             width: -webkit-fill-available;
             width: fill-available;
+            image-rendering: pixelated;
+            filter: blur(0.4px);
         }
 
         .storyImageContainer {
@@ -105,6 +107,41 @@
         #storyContainer {
             display: flex;
             justify-content: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        #storyContainer .story:first-of-type {
+            width: 350px;
+            display: block;
+            flex-direction: unset;
+            justify-content: unset;
+        }
+
+        #storyContainer .story:first-of-type img {
+            display: block;
+        }
+
+        #storyContainer .story:first-of-type .storyOtherMeta {
+            flex-direction: row;
+        }
+
+        .story:nth-child(3n),
+        .story:nth-child(3n+1) {
+            width: 170px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .story:nth-child(3n) img,
+        .story:nth-child(3n+1) img {
+            display: none;
+        }
+
+        .story:nth-child(3n) .storyOtherMeta,
+        .story:nth-child(3n+1) .storyOtherMeta {
+            flex-direction: column;
         }
 
         .storyAuthor {
@@ -119,6 +156,7 @@
             height: -webkit-fill-available;
             height: fill-available;
             padding-bottom: 40px;
+            overflow-y: auto;
         }
 
         .sectionTitle {
@@ -128,9 +166,14 @@
             padding: 5px;
         }
 
-        #loadOfSheet {
+        #sheets {
             height: 15px;
             background: linear-gradient(skyblue 0%, skyblue 20%, pink 20%, pink 40%, white 40%, white 60%, pink 60%, pink 80%, skyblue 80%)
+        }
+
+        .storyTime{
+            font-family: sans-serif;
+            color: var(--cis-grey);
         }
     </style>
 </head>
@@ -142,7 +185,7 @@
             <div>I'm paying</div>
         </div>
     </div>
-    <div id="loadOfSheet"></div>
+    <div id="sheets"></div>
     <div id="storyContainerContainer">
         <div class="sectionTitle">Headlines</div>
         <div id="storyContainer">
@@ -161,6 +204,23 @@
         "updated": 1690908327000,
         "category": "Test category"
     }]
+
+    async function getStories() {
+        await fetch(`${window.location.protocol}//${window.location.host}/asif.json`)
+            .then(res => res.json())
+            .then(out => storyRecordArrayToHtml(out))
+            .catch(err => { throw err });
+    }
+
+    function storyRecordArrayToHtml(storyRecordArray) {
+        var returnHtml = ""
+
+        for (var i = 0; i < storyRecordArray.length; i++) {
+            returnHtml += storyRecordToHtml(storyRecordArray[i])
+        }
+
+        document.getElementById("storyContainer").innerHTML += returnHtml;
+    }
 
     function storyRecordToHtml(storyRecord) {
         var gist = storyRecord.summary.split("</p>")[0] + "</p>"
@@ -187,7 +247,8 @@
     }
 
     function init() {
-        document.getElementById("storyContainer").innerHTML += storyRecordToHtml(testStory[0])
+        document.getElementById("storyContainer").innerHTML += storyRecordToHtml(testStory[0]);
+        getStories();
     }
 
     init();
