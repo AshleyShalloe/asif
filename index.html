@@ -134,6 +134,10 @@
             display: block;
         }
 
+        #storyContainer .story:first-of-type .storyBlurb {
+            display: block;
+        }
+
         #storyContainer .story:first-of-type .storyOtherMeta {
             flex-direction: row;
         }
@@ -145,6 +149,11 @@
             flex-direction: column;
             justify-content: space-between;
         }
+
+        .story:nth-child(3n) .storyBlurb,
+        .story:nth-child(3n+1) .storyBlurb{
+                display: none;
+            }
 
         .story:nth-child(3n) img,
         .story:nth-child(3n+1) img {
