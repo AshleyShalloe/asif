@@ -196,6 +196,34 @@
             font-family: nicefontsans;
             color: var(--cis-grey);
         }
+
+        #storyModal{
+            width: calc(360px - 40px);
+            height: 100vh;
+            background: white;
+            position: fixed;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        #storyModal #backButton{
+            background: var(--pride-blue);
+            border-radius: 100%;
+            height: 1em;
+            width: 1em;
+            padding: 0.5em;
+            color: white;
+            line-height: 1em;
+            cursor: pointer;
+            position: sticky;
+        }
+
+        #storyModalStory{
+            padding-bottom: 5em;
+        }
     </style>
 </head>
 
@@ -212,6 +240,10 @@
         <div id="storyContainer">
         </div>
     </div>
+    <div id="storyModal" style="display: none;">
+        <div id="backButton" onclick="document.getElementById('storyModal').style.display = 'none'">🢀</div>
+        <div id="storyModalStory"></div>
+    </div>
 </body>
 <script>
     'use strict'
@@ -226,7 +258,7 @@
         "category": "Test category"
     }]
 
-    async function getStories() {
+    async function loadStoriesJson() {
         await fetch(`${window.location.protocol}//${window.location.host}/asif.json`)
             .then(res => res.json())
             .then(out => storyRecordArrayToHtml(out))
@@ -249,7 +281,7 @@
         var updated = `${updated.toLocaleDateString()} ${updated.toLocaleTimeString()}`
 
         var returnHtml = `
-            <div class="story">
+            <div class="story" data-story-url="${storyRecord.story_url}">
                 <div class="storyHeading">
                     <div class="storyHeadingCategory">${storyRecord.category}</div>
                     <div class="storyHeadingSeparator">//</div>
@@ -267,9 +299,35 @@
         return returnHtml
     }
 
-    function init() {
+    async function getStory(input_url){
+        await fetch(`${window.location.protocol}//${window.location.hostname}:5000/get_story_by_url?url=${input_url}`)
+            .then(res => res.json())
+            .then(out => displayStoryModal(out))
+            .catch(err => { throw err });
+    }
+
+    function displayStoryModal(storyJson){
+        var storyModal = document.getElementById("storyModal")
+        var storyModalStory = document.getElementById("storyModalStory")
+
+        var storyHTML = storyJson.story
+
+        storyModalStory.innerHTML = storyHTML
+        storyModal.style.display = "block"
+    }
+
+    function addStoryOnclick(){
+        var storyarray = document.getElementsByClassName("story")
+
+        for (var i=0; i<storyarray.length; i++){
+            storyarray[i].setAttribute("onclick", "getStory(this.dataset.storyUrl)")
+        }
+    }
+
+    async function init() {
         document.getElementById("storyContainer").innerHTML += storyRecordToHtml(testStory[0]);
-        getStories();
+        await loadStoriesJson();
+        addStoryOnclick();
     }
 
     init();
