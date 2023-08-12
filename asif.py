@@ -21,7 +21,7 @@ def get_database_fields(feed_url):
         media_url = parsed_feed["entries"][i].get("media_content", [{}])[0].get("url")
         author    = parsed_feed["entries"][i].get("author", parsed_feed.get("feed", {}).get("title", "no author"))
         updated   = parsed_feed["entries"][i].get("updated", None)
-        category  = parsed_feed["entries"][i].get("tags", [])[0].get("term", [])
+        category  = parsed_feed["entries"][i].get("tags", [{}])[0].get("term", [])
         return_list.append([title, url, summary, media_url, author, updated, category])
 
     return_df = pd.DataFrame(return_list).rename({
