@@ -14,11 +14,11 @@
 
         @font-face {
             font-family: "nicefont";
-            src: url(res/NotoSerif-VariableFont_wdth,wght.ttf) format("truetype");
+            src: url({{ url_for('static', filename='res/NotoSerif-VariableFont_wdth,wght.ttf') }}) format("truetype");
         }
         @font-face {
             font-family: "nicefontsans";
-            src: url(res/NotoSans-Regular.ttf) format("truetype");
+            src: url({{ url_for('static', filename='res/NotoSans-Regular.ttf') }}) format("truetype");
         }
 
         html {
