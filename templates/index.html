@@ -321,7 +321,7 @@
     }
 
     async function getStory(input_url){
-        await fetch(`${window.location.protocol}//${window.location.hostname}:5000/get_story_by_url?url=${input_url}`)
+        await fetch(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/get_story_by_url?url=${input_url}`)
             .then(res => res.json())
             .then(out => displayStoryModal(out))
             .catch(err => { throw err });

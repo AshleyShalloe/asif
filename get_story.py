@@ -71,7 +71,7 @@ def retrieve_and_normalise_story(url):
             [
                 f"<p>{x}</p>"
                 for x in get_text(
-                    bs(soup).find("div", {"data-gu-name": "headline"})
+                    bs(soup, features="lxml").find("div", {"data-gu-name": "headline"})
                 ).split("\n")
             ]
         )
@@ -83,7 +83,7 @@ def retrieve_and_normalise_story(url):
             [
                 f"<p>{x}</p>"
                 for x in get_text(
-                    bs(soup).find("aside", {"data-gu-name": "meta"})
+                    bs(soup, features="lxml").find("aside", {"data-gu-name": "meta"})
                 ).split("\n")
             ]
         )
@@ -95,7 +95,7 @@ def retrieve_and_normalise_story(url):
             [
                 f"<p>{x}</p>"
                 for x in get_text(
-                    bs(soup).find("div", {"data-gu-name": "standfirst"})
+                    bs(soup, features="lxml").find("div", {"data-gu-name": "standfirst"})
                 ).split("\n")
             ]
         )
@@ -103,7 +103,7 @@ def retrieve_and_normalise_story(url):
         return_dict["standfirst"] = "Error parsing whatever a standfirst is"
         
     try:
-        return_dict["picture"] = bs(soup).find("div", {"data-gu-name": "media"}).find("img").get("src", "")
+        return_dict["picture"] = bs(soup, features="lxml").find("div", {"data-gu-name": "media"}).find("img").get("src", "")
     except:
         return_dict["picture"] = ""
     
