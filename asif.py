@@ -43,5 +43,5 @@ def retrieve_and_write_updated_json():
     ## to save updating if there is no need
     meta_df = get_database_fields(guardian_url)
 
-    with open("asif.json", "w") as outfile:
+    with open("static/asif.json", "w") as outfile:
         outfile.write(meta_df.to_json(orient="records"))
