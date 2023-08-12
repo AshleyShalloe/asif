@@ -1,10 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from get_story import retrieve_and_normalise_story
 from asif import retrieve_and_write_updated_json
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/', methods=['GET', 'POST'])
+def returnMainHtml():
+    return render_template("index.html")
 
 @app.route('/get_story_by_url')
 def getStoryByUrl():

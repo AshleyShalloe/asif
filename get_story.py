@@ -101,5 +101,10 @@ def retrieve_and_normalise_story(url):
         )
     except:
         return_dict["standfirst"] = "Error parsing whatever a standfirst is"
+        
+    try:
+        return_dict["picture"] = bs(soup).find("div", {"data-gu-name": "media"}).find("img").get("src", "")
+    except:
+        return_dict["picture"] = ""
     
     return return_dict

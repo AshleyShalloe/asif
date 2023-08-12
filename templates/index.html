@@ -224,6 +224,18 @@
         #storyModalStory{
             padding-bottom: 5em;
         }
+
+        #storyModal .modalMeta{
+            line-height: 1em;
+            font-size: small;
+        }
+
+        #storyModal .modalPicture img{
+            width: 100%;
+            width: -moz-available;
+            width: -webkit-fill-available;
+            width: fill-available;
+        }
     </style>
 </head>
 
@@ -258,8 +270,10 @@
         "category": "Test category"
     }]
 
+
+
     async function loadStoriesJson() {
-        await fetch(`${window.location.protocol}//${window.location.host}/asif.json`)
+        await fetch(`${window.location.protocol}//${window.location.host}/{{ url_for('static', filename='asif.json') }}`)
             .then(res => res.json())
             .then(out => storyRecordArrayToHtml(out))
             .catch(err => { throw err });
@@ -310,9 +324,21 @@
         var storyModal = document.getElementById("storyModal")
         var storyModalStory = document.getElementById("storyModalStory")
 
-        var storyHTML = storyJson.story
+        var story = storyJson.story
+        var headline = storyJson.headline
+        var meta = storyJson.meta
+        var standfirst = storyJson.standfirst
+        var picture = storyJson.picture
 
-        storyModalStory.innerHTML = storyHTML
+        var composedHTML = `
+            <div class="modalHeadline"><h2>${headline}</h2></div>
+            <div class="modalStandfirst"><h3>${standfirst}</h3></div>
+            <div class="modalPicture"><img src="${picture}" /></div>
+            <div class="modalMeta"><i>${meta}</i></div>
+            <div class="modalStory">${story}</div>
+        `
+
+        storyModalStory.innerHTML = composedHTML
         storyModal.style.display = "block"
     }
 
@@ -325,7 +351,7 @@
     }
 
     async function init() {
-        document.getElementById("storyContainer").innerHTML += storyRecordToHtml(testStory[0]);
+        // document.getElementById("storyContainer").innerHTML += storyRecordToHtml(testStory[0]);
         await loadStoriesJson();
         addStoryOnclick();
     }
