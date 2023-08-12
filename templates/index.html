@@ -21,6 +21,10 @@
             src: url({{ url_for('static', filename='res/NotoSans-Regular.ttf') }}) format("truetype");
         }
 
+        body, html, #storyContainerContainer{
+            overflow-x: hidden;
+        }
+
         html {
             font-family: nicefont;
             background: var(--cis-grey);
