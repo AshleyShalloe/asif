@@ -98,8 +98,6 @@
             width: -moz-available;
             width: -webkit-fill-available;
             width: fill-available;
-            image-rendering: pixelated;
-            filter: blur(0.4px);
         }
 
         .storyImageContainer {
@@ -267,6 +265,19 @@
         @media only screen and (max-width: 450px) {
             html {
                 background: var(--cis-lightgrey);
+                font-size: smaller;
+            }
+            .storyHeading{
+                font-size: small;
+            }
+            .storyImageContainer{
+                max-height: 125px;
+            }
+            .storyOtherMeta{
+                font-size: smaller;
+            }
+            #headerLogo{
+                font-size: xx-large;
             }
         }
     </style>
