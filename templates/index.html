@@ -190,6 +190,8 @@
             font-family: nicefont;
             font-weight: bold;
             padding: 5px;
+            display: flex;
+            justify-content: space-between;
         }
 
         #sheets {
@@ -246,6 +248,20 @@
             width: -webkit-fill-available;
             width: fill-available;
         }
+        #reloadButton{
+            font-size: xx-large; 
+            border-radius: 100%; 
+            width: 1.5em; 
+            height: 1.5em; 
+            border: 1px solid var(--pride-pink); 
+            background: white;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        #reloadButton:hover{
+            background: var(--pride-pink);
+            color: white;
+        }
     </style>
 </head>
 
@@ -258,7 +274,7 @@
     </div>
     <div id="sheets"></div>
     <div id="storyContainerContainer">
-        <div class="sectionTitle">Headlines</div>
+        <div class="sectionTitle"><span>Headlines</span><button id="reloadButton" onclick="doRefresh()">⭯</button></div>
         <div id="storyContainer">
         </div>
     </div>
@@ -369,8 +385,27 @@
         document.getElementById('modalBackButton').style.display = "none"
     }
 
+    function isFirefox(){
+    return navigator.userAgent.match(/firefox/i)
+    }
+
+    function firefoxQuirks(){
+        if (isFirefox()){
+            document.getElementsByTagName("body")[0].style.overflowY = "auto";
+        }
+    }
+
+    async function doRefresh(){
+        // do the API call
+        await fetch(`${window.location.protocol}//${window.location.host}/update_feed`)
+            .then(res => res.json())
+            .then(out => loadStoriesJson())
+            .catch(err => { throw err });
+    }
+
     async function init() {
         // document.getElementById("storyContainer").innerHTML += storyRecordToHtml(testStory[0]);
+        firefoxQuirks();
         await loadStoriesJson();
         addStoryOnclick();
         window.scrollTo(0,1); // mobile safari is silly
