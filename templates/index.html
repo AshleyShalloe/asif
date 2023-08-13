@@ -385,6 +385,27 @@
         document.getElementById('modalBackButton').style.display = "none"
     }
 
+    async function getBetterImages(){
+        var stories = document.getElementsByClassName("story")
+
+        for (var i=0; i<stories.length; i++){
+            var storyUrl = stories[i].dataset.storyUrl
+            var betterImageUrl
+
+            await fetch(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/get_story_image?url=${storyUrl}`)
+            .then(res => res.json())
+            .then(out => setBetterImage(stories[i], out))
+            .catch(err => { console.err("Failed to get better image for", storyUrl) });
+        }
+    }
+
+    function setBetterImage(target, json){
+        var url = json["image_url"]
+        if (url){
+            target.getElementsByClassName("storyImage")[0].src = url
+        }
+    }
+
     function isFirefox(){
     return navigator.userAgent.match(/firefox/i)
     }
@@ -409,6 +430,7 @@
         await loadStoriesJson();
         addStoryOnclick();
         window.scrollTo(0,1); // mobile safari is silly
+        await getBetterImages();
     }
 
     // globals

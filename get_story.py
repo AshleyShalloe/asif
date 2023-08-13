@@ -108,3 +108,11 @@ def retrieve_and_normalise_story(url):
         return_dict["picture"] = ""
     
     return return_dict
+
+def get_story_image_by_url(url):
+    soup = requests.get(url).text
+    
+    try:
+        return bs(soup, features="lxml").find("div", {"data-gu-name": "media"}).find("img").get("src", "")
+    except:
+        return None
