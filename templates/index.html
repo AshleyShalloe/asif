@@ -28,6 +28,7 @@
         html {
             font-family: nicefont;
             background: var(--cis-grey);
+            transition: background 5s;
         }
 
         body {
@@ -262,6 +263,12 @@
             background: var(--pride-pink);
             color: white;
         }
+
+        @media only screen and (max-width: 450px) {
+            html {
+                background: var(--cis-lightgrey);
+            }
+        }
     </style>
 </head>
 
@@ -395,7 +402,7 @@
             await fetch(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/get_story_image?url=${storyUrl}`)
             .then(res => res.json())
             .then(out => setBetterImage(stories[i], out))
-            .catch(err => { console.err("Failed to get better image for", storyUrl) });
+            .catch(err => { console.warn("Failed to get better image for", storyUrl) });
         }
     }
 
@@ -416,12 +423,29 @@
         }
     }
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     async function doRefresh(){
+        // disable the button
+        var theButton = document.getElementById("reloadButton")
+        theButton.disabled = true
+        
+        console.log("Doing refresh")
+
         // do the API call
         await fetch(`${window.location.protocol}//${window.location.host}/update_feed`)
             .then(res => res.json())
             .then(out => loadStoriesJson())
             .catch(err => { throw err });
+        
+        console.log("Done refresh")
+
+        // it looks less janky if we wait a bit
+        // the actual update is pretty quick
+        await sleep(1000)
+        theButton.disabled = false
     }
 
     async function init() {
